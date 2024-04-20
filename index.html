@@ -21,7 +21,12 @@
             const montreal = { lat: 45.508888, lng: -73.561668 }; // Coordinates of Montreal
             const mapOptions = {
                 center: montreal,
-                zoom: 12
+                zoom: 12,
+                styles: [{                   // Style rules to hide default POIs
+                    featureType: "poi",
+                    elementType: "all",
+                    stylers: [{ visibility: "off" }]
+                }]
             };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             geocoder = new google.maps.Geocoder();
