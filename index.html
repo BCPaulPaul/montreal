@@ -22,11 +22,10 @@
                 center: { lat: 45.508888, lng: -73.561668 }, // Coordinates of Montreal
                 zoom: 12,
                 styles: [{
-    featureType: "poi",
-    elementType: "labels",
-    stylers: [{ visibility: "off" }]
-}]
-
+                    featureType: "poi",
+                    elementType: "labels",
+                    stylers: [{ visibility: "off" }]
+                }]
             };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             geocoder = new google.maps.Geocoder();
@@ -37,21 +36,21 @@
                 { name: "Mont Royal, Montreal", category: "natural" },
                 { name: "Notre-Dame Basilica, Montreal", category: "historical" }
             ];
-            for (let location of locations) {
-                await geocodeAddress(location);
-            }
-            map.fitBounds(bounds); // Adjusts the viewport to include all markers
+
+            const geocodePromises = locations.map(location => geocodeAddress(location));
+            await Promise.all(geocodePromises);
+            map.fitBounds(bounds); // Adjusts the viewport to include all markers after all have been geocoded
         }
 
         async function geocodeAddress(location) {
             try {
                 const response = await geocoder.geocode({ 'address': location.name });
-                if (response.status === 'OK') {
+                if (response.results && response.results.length > 0 && response.status === 'OK') {
                     const pos = response.results[0].geometry.location;
                     const marker = new google.maps.Marker({
                         map: map,
                         position: pos,
-                        title: location.name, // Tooltip for marker
+                        title: location.name,
                         icon: getMarkerIcon(location.category)
                     });
                     bounds.extend(pos);
