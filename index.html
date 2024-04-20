@@ -18,64 +18,55 @@
         let bounds;
 
         async function initMap() {
+            const montreal = { lat: 45.508888, lng: -73.561668 }; // Coordinates of Montreal
             const mapOptions = {
-                center: { lat: 45.508888, lng: -73.561668 }, // Coordinates of Montreal
-                zoom: 12,
-                styles: [{
-                    featureType: "poi",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                }]
+                center: montreal,
+                zoom: 12
             };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             geocoder = new google.maps.Geocoder();
             bounds = new google.maps.LatLngBounds();
+            bounds.extend(montreal); // Extend bounds to include Montreal
 
             const locations = [
-                { name: "Place des Arts, Montreal", category: "cultural" },
-                { name: "Mont Royal, Montreal", category: "natural" },
-                { name: "Notre-Dame Basilica, Montreal", category: "historical" }
+                "Place des Arts, Montreal",
+                "Mont Royal, Montreal",
+                "Notre-Dame Basilica, Montreal"
             ];
 
-            const geocodePromises = locations.map(location => geocodeAddress(location));
-            await Promise.all(geocodePromises);
-            map.fitBounds(bounds); // Adjusts the viewport to include all markers after all have been geocoded
+            await Promise.all(locations.map(location => geocodeAddress(location)));
+            map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 }); // Optionally add padding
         }
 
         async function geocodeAddress(location) {
             try {
-                const response = await geocoder.geocode({ 'address': location.name });
+                const response = await geocoder.geocode({ 'address': location });
                 if (response.results && response.results.length > 0 && response.status === 'OK') {
                     const pos = response.results[0].geometry.location;
-                    const marker = new google.maps.Marker({
-                        map: map,
-                        position: pos,
-                        title: location.name,
-                        icon: getMarkerIcon(location.category)
-                    });
-                    bounds.extend(pos);
-
-                    const infoWindow = new google.maps.InfoWindow({
-                        content: `<div><strong>${location.name}</strong></div>`
-                    });
-                    marker.addListener('click', () => {
-                        infoWindow.open(map, marker);
-                    });
+                    addMarker(pos, location);
+                    bounds.extend(pos); // Extend the bounds to include this location
                 } else {
-                    throw new Error('Geocoder failed due to: ' + response.status);
+                    console.error('Geocoding error for ' + location + ': ' + response.status);
                 }
             } catch (error) {
-                console.error('Geocoding error: ' + error);
+                console.error('Geocoding exception for ' + location + ': ', error);
             }
         }
 
-        function getMarkerIcon(category) {
-            const color = {
-                'cultural': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                'natural': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                'historical': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-            };
-            return color[category] || 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'; // Default
+        function addMarker(position, title) {
+            const marker = new google.maps.Marker({
+                map: map,
+                position: position,
+                title: title
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<div><strong>${title}</strong></div>`
+            });
+
+            marker.addListener('click', () => {
+                infoWindow.open(map, marker);
+            });
         }
     </script>
 </body>
