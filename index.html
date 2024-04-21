@@ -37,7 +37,7 @@
 
             const locations = [
 
-            { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
+                { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
                 { address: "Schwartz's Deli, 3895 St Laurent Blvd, Montreal", number: 1, color: 'red' },
                 { address: "IGA Complexe Desjardins, 5 Place Desjardins, Montreal", number: 1, color: 'red' },
 
@@ -133,7 +133,7 @@
             const url = `https://www.google.com/maps/search/?api=1&query=${latLng}`;
             const marker = new google.maps.Marker({
                 map: map,
-                position: position,
+                position: { lat: position.lat() + 0.0005 + ((Math.random() * 10) - 5)/100000, lng: position.lng() + ((Math.random() * 10) - 5)/100000 },
                 label: {
                     text: number.toString(),
                     color: 'white',
@@ -149,7 +149,7 @@
             });
 
             const infoWindow = new google.maps.InfoWindow({
-                content: `<div><strong>${title}</strong><br><a href="${url}" target="_blank">Open in Google Maps</a></div>`
+                content: `<div><strong><a href="${url}" target="_blank">${title}</a></strong></div>`
             });
 
             marker.addListener('click', () => {
@@ -159,11 +159,11 @@
             // Create a separate label for the address near the marker
             const label = new google.maps.Marker({
                 map: map,
-                position: { lat: position.lat() + 0.0005, lng: position.lng() }, // Offset slightly for visibility
+                position: { lat: position.lat() + 0.0005 + ((Math.random() * 20) - 10)/10000, lng: position.lng() + ((Math.random() * 20) - 10)/100000 }, // Offset slightly for visibility
                 label: {
                     text: title.split(',')[0],
                     color: color,
-                    fontSize: '10px',
+                    fontSize: '12px',
                     fontWeight: 'bold'
                 },
                 icon: {
@@ -177,5 +177,6 @@
             labels.push(label);
         }
     </script>
+    
 </body>
 </html>
