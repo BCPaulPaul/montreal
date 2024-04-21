@@ -2,10 +2,10 @@
 <html>
 <head>
     <title>Montreal Map Markers</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZmQ7dDmii8uuDNwWWXKXWyeJsQsZ3JmY&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwu3DidfQEHzg2d6fiC3nAn8FIBNFES0U&callback=initMap" async defer></script>
     <style>
         #map {
-            height: 400px;
+            height: 100vh;
             width: 100%;
         }
     </style>
@@ -18,55 +18,88 @@
         let bounds;
 
         async function initMap() {
-            const montreal = { lat: 45.508888, lng: -73.561668 }; // Coordinates of Montreal
+            const montreal = { lat: 45.508888, lng: -73.561668 };
             const mapOptions = {
                 center: montreal,
-                zoom: 12/*,
-                styles: [{                   // Style rules to hide default POIs
+                zoom: 13,
+                styles: [{
                     featureType: "poi",
                     elementType: "all",
                     stylers: [{ visibility: "off" }]
-                }]*/
+                }]
             };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             geocoder = new google.maps.Geocoder();
             bounds = new google.maps.LatLngBounds();
-            bounds.extend(montreal); // Extend bounds to include Montreal
+            bounds.extend(montreal);
 
             const locations = [
-                "Place des Arts, Montreal",
-                "Mont Royal, Montreal",
-                "Notre-Dame Basilica, Montreal"
+            { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
+{ address: "Schwartz's Deli, 3895 St Laurent Blvd, Montreal", number: 1, color: 'red' },
+{ address: "IGA Complexe Desjardins, 5 Place Desjardins, Montreal", number: 1, color: 'red' },
+
+{ address: "Old Montreal, Montréal", number: 2, color: 'green' },
+{ address: "Montreal City Hall, Montréal", number: 2, color: 'green' }, 
+{ address: "Bonsecours Market, Montréal", number: 2, color: 'green' }, 
+{ address: "Notre-Dame-de-Bon-Secours Chapel, Montréal", number: 2, color: 'green' }, 
+{ address: "Notre-Dame Basilica, Montréal", number: 2, color: 'green' },
+{ address: "Place-d'Armes, Montréal", number: 2, color: 'green' },
+{ address: "Underground City, Montréal", number: 2, color: 'green' },
+{ address: "The Place Jacques Cartier , Montréal", number: 2, color: 'green' },
+{ address: "Château Ramezay , Montréal", number: 2, color: 'green' },
+{ address: "Sir George-Étienne Cartier, Montréal", number: 2, color: 'green' },
+{ address: "The Saint-Sulpice Seminary, Montréal", number: 2, color: 'green' },
+{ address: "Saint Jacques Street, Montréal", number: 2, color: 'green' },
+{ address: "Crew Cafe, Montréal", number: 2, color: 'green' },
+{ address: "Saint-Paul Street, Montréal", number: 2, color: 'green' },
+{ address: "Old Port (Vieux-Port), Montréal", number: 2, color: 'green' },
+{ address: "Saint Henri, Montréal", number: 2, color: 'green' }, 
+{ address: "Little Burgundy, Montréal", number: 2, color: 'green' }, 
+{ address: "Atwater public market, Montréal", number: 2, color: 'green' }, 
+{ address: "Notre Dame Street restaurant, Montréal", number: 2, color: 'green' } 
             ];
 
             await Promise.all(locations.map(location => geocodeAddress(location)));
-            map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 }); // Optionally add padding
         }
 
         async function geocodeAddress(location) {
             try {
-                const response = await geocoder.geocode({ 'address': location });
-                if (response.results && response.results.length > 0 && response.status === 'OK') {
-                    const pos = response.results[0].geometry.location;
-                    addMarker(pos, location);
-                    bounds.extend(pos); // Extend the bounds to include this location
-                } else {
-                    console.error('Geocoding error for ' + location + ': ' + response.status);
-                }
+                const response = await geocoder.geocode({ 'address': location.address }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        //console.log('Geocode response for ' + location.address + ':', results);
+                        addMarker(results[0].geometry.location, location.address, location.number, location.color);
+                    } else {
+                        console.error('Geocoding error for ' + location.address + ': ' + status);
+                    }
+                });
             } catch (error) {
-                console.error('Geocoding exception for ' + location + ': ', error);
+                console.error('Geocoding exception for ' + location.address + ': ', error);
             }
         }
 
-        function addMarker(position, title) {
+        function addMarker(position, title, number, color) {
+            const latLng = position.lat() + ',' + position.lng();
+            const url = `https://www.google.com/maps/search/?api=1&query=${latLng}`;
             const marker = new google.maps.Marker({
                 map: map,
                 position: position,
-                title: title
+                label: {
+                    text: number.toString(),  // Convert number to string for display
+                    color: 'white',           // Text color
+                    fontSize: '12px'          // Text size
+                },
+                title: title,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: color,  // Marker color
+                    fillOpacity: 0.8,
+                    strokeWeight: 0
+                }
             });
 
             const infoWindow = new google.maps.InfoWindow({
-                content: `<div><strong>${title}</strong></div>`
+                content: `<div><strong>${title}</strong><br><a href="${url}" target="_blank">Open in Google Maps</a></div>`
             });
 
             marker.addListener('click', () => {
