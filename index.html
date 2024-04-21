@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Montreal Map Markers</title>
+    <!-- AIzaSyDZmQ7dDmii8uuDNwWWXKXWyeJsQsZ3JmY -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZmQ7dDmii8uuDNwWWXKXWyeJsQsZ3JmY&callback=initMap" async defer></script>
     <style>
         #map {
@@ -34,29 +35,69 @@
             bounds.extend(montreal);
 
             const locations = [
-            { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
-{ address: "Schwartz's Deli, 3895 St Laurent Blvd, Montreal", number: 1, color: 'red' },
-{ address: "IGA Complexe Desjardins, 5 Place Desjardins, Montreal", number: 1, color: 'red' },
+                { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
+                { address: "Schwartz's Deli, 3895 St Laurent Blvd, Montreal", number: 1, color: 'red' },
+                { address: "IGA Complexe Desjardins, 5 Place Desjardins, Montreal", number: 1, color: 'red' },
 
-{ address: "Old Montreal, Montréal", number: 2, color: 'green' },
-{ address: "Montreal City Hall, Montréal", number: 2, color: 'green' }, 
-{ address: "Bonsecours Market, Montréal", number: 2, color: 'green' }, 
-{ address: "Notre-Dame-de-Bon-Secours Chapel, Montréal", number: 2, color: 'green' }, 
-{ address: "Notre-Dame Basilica, Montréal", number: 2, color: 'green' },
-{ address: "Place-d'Armes, Montréal", number: 2, color: 'green' },
-{ address: "Underground City, Montréal", number: 2, color: 'green' },
-{ address: "The Place Jacques Cartier , Montréal", number: 2, color: 'green' },
-{ address: "Château Ramezay , Montréal", number: 2, color: 'green' },
-{ address: "Sir George-Étienne Cartier, Montréal", number: 2, color: 'green' },
-{ address: "The Saint-Sulpice Seminary, Montréal", number: 2, color: 'green' },
-{ address: "Saint Jacques Street, Montréal", number: 2, color: 'green' },
-{ address: "Crew Cafe, Montréal", number: 2, color: 'green' },
-{ address: "Saint-Paul Street, Montréal", number: 2, color: 'green' },
-{ address: "Old Port (Vieux-Port), Montréal", number: 2, color: 'green' },
-{ address: "Saint Henri, Montréal", number: 2, color: 'green' }, 
-{ address: "Little Burgundy, Montréal", number: 2, color: 'green' }, 
-{ address: "Atwater public market, Montréal", number: 2, color: 'green' }, 
-{ address: "Notre Dame Street restaurant, Montréal", number: 2, color: 'green' } 
+                { address: "Old Montreal, Montréal", number: 2, color: 'green' },
+                { address: "Montreal City Hall, Montréal", number: 2, color: 'green' }, 
+                { address: "Bonsecours Market, Montréal", number: 2, color: 'green' }, 
+                { address: "Notre-Dame-de-Bon-Secours Chapel, Montréal", number: 2, color: 'green' }, 
+                { address: "Notre-Dame Basilica, Montréal", number: 2, color: 'green' },
+                { address: "Place-d'Armes, Montréal", number: 2, color: 'green' },
+                { address: "Underground City, Montréal", number: 2, color: 'green' },
+                { address: "The Place Jacques Cartier , Montréal", number: 2, color: 'green' },
+                { address: "Château Ramezay , Montréal", number: 2, color: 'green' },
+                { address: "Sir George-Étienne Cartier, Montréal", number: 2, color: 'green' },
+                { address: "The Saint-Sulpice Seminary, Montréal", number: 2, color: 'green' },
+                { address: "Saint Jacques Street, Montréal", number: 2, color: 'green' },
+                { address: "Crew Cafe, Montréal", number: 2, color: 'green' },
+                { address: "Saint-Paul Street, Montréal", number: 2, color: 'green' },
+                { address: "Old Port (Vieux-Port), Montréal", number: 2, color: 'green' },
+                { address: "Saint Henri, Montréal", number: 2, color: 'green' }, 
+                { address: "Little Burgundy, Montréal", number: 2, color: 'green' }, 
+                { address: "Atwater public market, Montréal", number: 2, color: 'green' }, 
+                { address: "Notre Dame Street restaurant, Montréal", number: 2, color: 'green' }, 
+
+                { address: "Petit Champlain (red door)- 68 Rue du Petit Champlain, Quebec City", number: 3, color: 'blue' }, 
+                { address: "Escalier Casse-Cou (Breakneck Steps), Quebec City", number: 3, color: 'blue' },
+                { address: "Place Royal & La Fresque des Québécois, Quebec City", number: 3, color: 'blue' },
+                { address: "Fairmont Le Chateau Frontenac, Quebec City", number: 3, color: 'blue' },
+                { address: "Terrace Dufferin, Quebec City", number: 3, color: 'blue' },
+                { address: "Montmorency Park National Historic Site, Quebec City", number: 3, color: 'blue' },
+                { address: "Pierre-Dugua-De-Mons Terrace, Quebec City", number: 3, color: 'blue' },
+                { address: "Parc du Bastion de la Reine, Quebec City", number: 3, color: 'blue' },
+                { address: "La Boutique de Noel de Quebec, Quebec City", number: 3, color: 'blue' },
+                { address: "Fontaine de Tourny, Quebec City", number: 3, color: 'blue' },
+                { address: "Hotel La Maison Demers, Quebec City", number: 3, color: 'blue' },
+                { address: "Parc Samuel-Holland, Quebec City", number: 3, color: 'blue' },
+
+                { address: "Mont-Royal, Montréal", number: 4, color: 'Purple' },
+                { address: "Westmount Park, Montréal", number: 4, color: 'Purple' },
+                { address: "Beaver Lake, Montréal", number: 4, color: 'Purple' }, 
+                { address: "Soleil Belvedere, Montréal", number: 4, color: 'Purple' },
+                { address: "Café Suspendu, Montréal", number: 4, color: 'Purple' },
+                { address: "McGill campus, Montréal", number: 4, color: 'Purple' },
+                { address: "Square Saint-Louis, Montréal", number: 4, color: 'Purple' },
+                { address: "Saint Joseph's Oratory, Montréal", number: 4, color: 'Purple' },
+                { address: "Mile End, Montréal", number: 4, color: 'Purple' },
+                { address: "The Plateau, Montréal", number: 4, color: 'Purple' },
+                { address: "Jean-Talon Market, Montréal", number: 4, color: 'Purple' },
+                { address: "Vintage and Boutique, Montréal", number: 4, color: 'Purple' },
+                { address: "Citizen Vintage, Montréal", number: 4, color: 'Purple' },
+                { address: "Annex Vintage, Montréal", number: 4, color: 'Purple' },
+                { address: "Unicorn, Montréal", number: 4, color: 'Purple' },
+                { address: "Le Marché des Possibles, Montréal", number: 4, color: 'Purple' }, 
+                { address: "Aire Commune , Montréal", number: 4, color: 'Purple' },
+                { address: "Fairmount Bagel, Montréal", number: 4, color: 'Purple' },
+                { address: "Bagel St-Viateur, Montréal", number: 4, color: 'Purple' },
+                { address: "Wilensky’s- deli, Montréal", number: 4, color: 'Purple' },
+                { address: "Kem-Coba-ice cream, Montréal", number: 4, color: 'Purple' },
+                { address: "Café Olimpico, Montréal", number: 4, color: 'Purple' },
+                { address: "Le Plateau-Mont-Royal, Montréal", number: 4, color: 'Purple' },
+                { address: "Main, Boulevard Saint-Laurent, Montréal", number: 4, color: 'Purple' },
+                { address: "Cocktail - Bily Kun, Montréal", number: 4, color: 'Purple' },
+                { address: "Bakery-Hof Kelsten, Montréal", number: 4, color: 'Purple' }
             ];
 
             await Promise.all(locations.map(location => geocodeAddress(location)));
