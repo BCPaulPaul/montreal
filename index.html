@@ -17,6 +17,7 @@
         let map;
         let geocoder;
         let bounds;
+        let labels = [];
 
         async function initMap() {
             const montreal = { lat: 45.508888, lng: -73.561668 };
@@ -35,7 +36,8 @@
             bounds.extend(montreal);
 
             const locations = [
-                { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
+
+            { address: "Hôtel Saint-Laurent, Montréal", number: 1, color: 'red' },
                 { address: "Schwartz's Deli, 3895 St Laurent Blvd, Montreal", number: 1, color: 'red' },
                 { address: "IGA Complexe Desjardins, 5 Place Desjardins, Montreal", number: 1, color: 'red' },
 
@@ -101,13 +103,21 @@
             ];
 
             await Promise.all(locations.map(location => geocodeAddress(location)));
+
+            // Add zoom listener to control label visibility
+            map.addListener('zoom_changed', () => {
+                const zoom = map.getZoom();
+                // Set visibility based on zoom level
+                labels.forEach(label => {
+                    label.setVisible(zoom >= 15); // Adjust the zoom level threshold as needed
+                });
+            });
         }
 
         async function geocodeAddress(location) {
             try {
                 const response = await geocoder.geocode({ 'address': location.address }, function(results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
-                        //console.log('Geocode response for ' + location.address + ':', results);
                         addMarker(results[0].geometry.location, location.address, location.number, location.color);
                     } else {
                         console.error('Geocoding error for ' + location.address + ': ' + status);
@@ -125,15 +135,14 @@
                 map: map,
                 position: position,
                 label: {
-                    text: number.toString(),  // Convert number to string for display
-                    color: 'white',           // Text color
-                    fontSize: '12px'          // Text size
+                    text: number.toString(),
+                    color: 'white',
+                    fontSize: '12px'
                 },
-                title: title,
                 icon: {
                     path: google.maps.SymbolPath.CIRCLE,
-                    scale: 10,
-                    fillColor: color,  // Marker color
+                    scale: 12,
+                    fillColor: color,
                     fillOpacity: 0.8,
                     strokeWeight: 0
                 }
@@ -146,6 +155,26 @@
             marker.addListener('click', () => {
                 infoWindow.open(map, marker);
             });
+
+            // Create a separate label for the address near the marker
+            const label = new google.maps.Marker({
+                map: map,
+                position: { lat: position.lat() + 0.0005, lng: position.lng() }, // Offset slightly for visibility
+                label: {
+                    text: title.split(',')[0],
+                    color: color,
+                    fontSize: '10px',
+                    fontWeight: 'bold'
+                },
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 0, // Invisible marker
+                    fillColor: 'rgba(0,0,0,0)',
+                    strokeWeight: 0
+                },
+                visible: false // Initially hidden
+            });
+            labels.push(label);
         }
     </script>
 </body>
