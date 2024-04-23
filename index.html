@@ -128,7 +128,7 @@
 
         function addMarker(position, title, number, color) {
             const latLng = position.lat() + ',' + position.lng();
-            const url = `https://www.google.com/maps/search/?api=1&query=${title}`;
+            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(title)}`;
             const marker = new google.maps.Marker({
                 map: map,
                 position: { lat: position.lat() + 0.0005 + ((Math.random() * 10) - 5)/100000, lng: position.lng() + ((Math.random() * 10) - 5)/100000 },
